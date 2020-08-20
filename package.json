@@ -1,0 +1,17 @@
+{
+  "name": "auto-plex",
+  "version": "0.0.1",
+  "main": "plex.js",
+  "dependencies": {
+    "async": "^3.2.0",
+    "extended-emitter": "^1.0.4",
+    "object-hash": "^2.0.3"
+  },
+  "devDependencies": {
+    "mocha": "^8.0.1",
+    "chai": "^4.2.0"
+  },
+  "scripts":{
+    "test" : "./node_modules/mocha/bin/mocha"
+  }
+}
