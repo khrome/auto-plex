@@ -27,6 +27,19 @@ var makeDummy = function(emitter, counts){
             cb();
         }, 0)
     };
+    var calls = 0;
+    dummy.prototype.spun = function(){
+        counts.spun++;
+        return calls++;
+    };
+    dummy.prototype.stun = function(){
+        counts.stun++;
+        return new Promise(function(resolve){
+            setTimeout(function(){
+                resolve();
+            }, 0)
+        });
+    };
     dummy.prototype.run = function(a, b, c, cb){
         counts.run++;
         setTimeout(function(){
@@ -39,11 +52,31 @@ var makeDummy = function(emitter, counts){
 //NEW TESTS
 
 var test = {
+    functions : function(number, done){
+        var counts = {
+            cons : 0,
+            fun : 0,
+            run : 0,
+            stun : 0,
+            events: 0,
+            subevents: 0,
+        }
+        var dummy = makeDummy(new Emitter(), counts);
+        var multi = Plex();
+        for(var lcv=0; lcv<number; lcv++){
+            multi.plex(new dummy());
+        }
+        var results = multi.spun();
+        should.exist(results);
+        results.length.should.equal(number);
+        done();
+    },
     asyncFunctions : function(number, done){
         var counts = {
             cons : 0,
             fun : 0,
             run : 0,
+            stun : 0,
             events: 0,
             subevents: 0,
         }
@@ -57,6 +90,27 @@ var test = {
         multi.fun(function(){
             counts.cons.should.equal(number);
             counts.fun.should.equal(number);
+            done();
+        });
+    },
+    asyncPromises : function(number, done){
+        var counts = {
+            cons : 0,
+            fun : 0,
+            run : 0,
+            stun : 0,
+            events: 0,
+            subevents: 0,
+        }
+        var dummy = makeDummy(new Emitter(), counts);
+        var multi = Plex();
+        for(var lcv=0; lcv<number; lcv++){
+            multi.plex(new dummy());
+        }
+        var promise = multi.stun();
+        should.exist(promise);
+        promise.then(function(){
+            counts.stun.should.equal(number);
             done();
         });
     },
@@ -115,69 +169,115 @@ var test = {
 }
 
 describe('auto-plex', function(){
-    describe('can Plex simple objects with function calls', function(){
-        it('with a single object', function(done){
-            test.asyncFunctions(1, done);
+    describe('can Plex simple objects', function(){
+        describe('with function calls', function(){
+            it('with a single object', function(done){
+                test.asyncFunctions(1, done);
+            });
+
+            it('with two objects', function(done){
+                test.asyncFunctions(2, done);
+            });
+
+            it('ten objects at a time', function(done){
+                test.asyncFunctions(10, done);
+            });
+
+            it('one hundred objects at a time', function(done){
+                test.asyncFunctions(100, done);
+            });
+
+            it('one thousand objects at a time', function(done){
+                test.asyncFunctions(1000, done);
+            });
         });
 
-        it('with two objects', function(done){
-            test.asyncFunctions(2, done);
+        describe('with events', function(){
+            it('with a single object', function(done){
+                test.events(1, ['word-start'], done);
+            });
+
+            it('with two objects', function(done){
+                test.events(2, ['word-start'], done);
+            });
+
+            it('ten objects at a time', function(done){
+                test.events(10, ['word-start'], done);
+            });
+
+            it('one hundred objects at a time', function(done){
+                test.events(100, ['word-start'], done);
+            });
+
+            it('one thousand objects at a time', function(done){
+                test.events(1000, ['word-start'], done);
+            });
         });
 
-        it('ten objects at a time', function(done){
-            test.asyncFunctions(10, done);
+        describe('with multiple events', function(){
+            it('with a single object', function(done){
+                test.events(1, ['word-start', 'word-stop'], done);
+            });
+
+            it('with two objects', function(done){
+                test.events(2, ['word-start', 'word-stop'], done);
+            });
+
+            it('ten objects at a time', function(done){
+                test.events(10, ['word-start', 'word-stop'], done);
+            });
+
+            it('one hundred objects at a time', function(done){
+                test.events(100, ['word-start', 'word-stop'], done);
+            });
+
+            it('one thousand objects at a time', function(done){
+                test.events(1000, ['word-start', 'word-stop'], done);
+            });
         });
 
-        it('one hundred objects at a time', function(done){
-            test.asyncFunctions(100, done);
+        describe('with promises', function(){
+            it('with a single object', function(done){
+                test.asyncPromises(1, done);
+            });
+
+            it('with two objects', function(done){
+                test.asyncPromises(2, done);
+            });
+
+            it('ten objects at a time', function(done){
+                test.asyncPromises(10, done);
+            });
+
+            it('one hundred objects at a time', function(done){
+                test.asyncPromises(100, done);
+            });
+
+            it('one thousand objects at a time', function(done){
+                test.asyncPromises(1000, done);
+            });
         });
 
-        it('one thousand objects at a time', function(done){
-            test.asyncFunctions(1000, done);
-        });
-    });
+        describe('with synchronous functions', function(){
+            it('with a single object', function(done){
+                test.functions(1, done);
+            });
 
-    describe('can Plex simple objects with events', function(){
-        it('with a single object', function(done){
-            test.events(1, ['word-start'], done);
-        });
+            it('with two objects', function(done){
+                test.functions(2, done);
+            });
 
-        it('with two objects', function(done){
-            test.events(2, ['word-start'], done);
-        });
+            it('ten objects at a time', function(done){
+                test.functions(10, done);
+            });
 
-        it('ten objects at a time', function(done){
-            test.events(10, ['word-start'], done);
-        });
+            it('one hundred objects at a time', function(done){
+                test.functions(100, done);
+            });
 
-        it('one hundred objects at a time', function(done){
-            test.events(100, ['word-start'], done);
-        });
-
-        it('one thousand objects at a time', function(done){
-            test.events(1000, ['word-start'], done);
-        });
-    });
-
-    describe('can Plex simple objects with multiple events', function(){
-        it('with a single object', function(done){
-            test.events(1, ['word-start', 'word-stop'], done);
-        });
-
-        it('with two objects', function(done){
-            test.events(2, ['word-start', 'word-stop'], done);
-        });
-
-        it('ten objects at a time', function(done){
-            test.events(10, ['word-start', 'word-stop'], done);
-        });
-
-        it('one hundred objects at a time', function(done){
-            test.events(100, ['word-start', 'word-stop'], done);
-        });
-
-        it('one thousand objects at a time', function(done){
-            test.events(1000, ['word-start', 'word-stop'], done);
+            it('one thousand objects at a time', function(done){
+                test.functions(1000, done);
+            });
         });
     });
 });

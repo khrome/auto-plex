@@ -1,6 +1,6 @@
 {
   "name": "auto-plex",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "main": "plex.js",
   "dependencies": {
     "async": "^3.2.0",
@@ -13,5 +13,23 @@
   },
   "scripts":{
     "test" : "./node_modules/mocha/bin/mocha"
+},
+  "homepage": "https://www.npmjs.com/package/auto-plex",
+  "description": "Generic Multiplexing for Objects in JS",
+  "keywords": [
+    "ascii"
+  ],
+  "author": "Abbey Hawk Sparrow <@khrome> (http://patternweaver.com)",
+  "contributors": [],
+  "bugs": {
+    "url": "https://github.com/khrome/auto-plex/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/khrome/auto-plex.git"
+  },
+  "engines": {
+    "node": "*"
   }
 }

@@ -56,6 +56,41 @@ An Asynchronous Callback Functions Example:
     });
 ```
 
+A Synchronous Returns Example:
+
+```js
+    // given:
+    // a Function .someMember which takes some args and returns a value
+    // an object anObject, which has a Function .someMember
+    // an object anotherObject, which has a Function .someMember
+    // an object aThirdObject, which has a Function .someMember
+    var multi = new Plex();
+    multi.plex(anObject);
+    multi.plex(anotherObject);
+    multi.plex(aThirdObject);
+    var results = multi.someMember(arg1, ... argN);
+    // results[0] contains anObject return;
+    // results[1] contains anotherObject return;
+    // results[2] contains aThirdObject return;
+```
+
+A Promises Example:
+
+```js
+    // given:
+    // a Function .someMember which takes some args and returns a promise
+    // an object anObject, which has a Function .someMember
+    // an object anotherObject, which has a Function .someMember
+    // an object aThirdObject, which has a Function .someMember
+    var multi = new Plex();
+    multi.plex(anObject);
+    multi.plex(anotherObject);
+    multi.plex(aThirdObject);
+    multi.someMember(arg1, ... argN).then(function(anReturn, anotherReturn, aThirdReturn){
+
+    });
+```
+
 Legacy Support
 --------------
 If you're working with an older version of Node that doesn't include proxies, you need to recite the ancient words:
@@ -78,6 +113,7 @@ Roadmap
 
 - [x] Explicit Events
 - [x] Asynchronous Callback Functions
-- [ ] Asynchronous Promise Functions
-- [x] Synchronous Functions (Untested)
+- [x] Asynchronous Promise Functions
+- [x] Synchronous Functions
 - [ ] Generic Events (danger!)
+- [ ] Arg transpose (make args stack with the same sig as FN)
