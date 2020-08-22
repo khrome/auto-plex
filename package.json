@@ -1,6 +1,6 @@
 {
   "name": "auto-plex",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "plex.js",
   "dependencies": {
     "async": "^3.2.0",
@@ -17,7 +17,9 @@
   "homepage": "https://www.npmjs.com/package/auto-plex",
   "description": "Generic Multiplexing for Objects in JS",
   "keywords": [
-    "ascii"
+    "async",
+    "object",
+    "multiplex"
   ],
   "author": "Abbey Hawk Sparrow <@khrome> (http://patternweaver.com)",
   "contributors": [],
